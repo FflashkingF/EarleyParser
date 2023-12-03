@@ -15,18 +15,18 @@ void NormalizeString(std::string& str) {
   str = std::move(new_str);
 }
 
-std::string ScanString() {
+std::string ScanString(bool is_scan_empty) {
   std::string str;
-  while (str.empty()) {
+  do {
     std::getline(std::cin, str);
     NormalizeString(str);
-  }
+  } while (str.empty() && !is_scan_empty);
   return str;
 }
 
 template <typename Iterator, typename OutStream>
 void Print(Iterator begin_it, Iterator end_it, OutStream& out) {
-  for(Iterator it = begin_it; it != end_it; ++it) {
+  for (Iterator it = begin_it; it != end_it; ++it) {
     out << *it << ' ';
   }
   out << '\n';

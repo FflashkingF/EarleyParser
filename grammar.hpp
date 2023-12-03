@@ -1,25 +1,28 @@
 #pragma once
 
 #include <iostream>
+#include <map>
 #include <set>
 #include <vector>
 
 #include "in_out_helper.hpp"
 
-class Grammar {
- private:
-  std::set<char> non_terms_;
-  std::set<char> alph_;
-  std::set<std::pair<char, std::string>> rules_;
-  char start_;
+struct Grammar {
+  using Rule = std::pair<char, std::string>;
+  std::set<char> non_terms;
+  std::set<char> alph;
+  std::set<Rule> rules;
+  char start;
+  std::map<char, std::vector<std::string>> fast_rules;
 
- public:
   Grammar() = default;
   Grammar(const std::set<char>& non_terms, const std::set<char>& alph,
-          const std::set<std::pair<char, std::string>>& rules, char start)
-      : non_terms_(non_terms), alph_(alph), rules_(rules), start_(start) {}
-
-  friend std::ostream& operator<<(std::ostream&, const Grammar&);
+          const std::set<Rule>& rules, char start)
+      : non_terms(non_terms), alph(alph), rules(rules), start(start) {
+    for (const auto& rule : rules) {
+      fast_rules[rule.first].push_back(rule.second);
+    }
+  }
 };
 
 std::pair<char, std::string> GetRule(std::string& str) {
@@ -34,19 +37,19 @@ std::istream& operator>>(std::istream& in, Grammar& gr) {
 
   std::string temp;
 
-  temp = ScanString();
+  temp = ScanString(false);
   std::set<char> non_terms(temp.begin(), temp.end());
 
-  temp = ScanString();
+  temp = ScanString(false);
   std::set<char> alph(temp.begin(), temp.end());
 
-  std::set<std::pair<char, std::string>> rules;
+  std::set<Grammar::Rule> rules;
   for (size_t i = 0; i < cnt_of_rules; ++i) {
-    temp = ScanString();
+    temp = ScanString(false);
     rules.insert(GetRule(temp));
   }
 
-  temp = ScanString();
+  temp = ScanString(false);
   char start = temp[0];
 
   gr = Grammar(non_terms, alph, rules, start);
@@ -56,17 +59,17 @@ std::istream& operator>>(std::istream& in, Grammar& gr) {
 std::ostream& operator<<(std::ostream& out, const Grammar& gr) {
   out << "\nStart Print Grammar\n";
 
-  out << gr.non_terms_.size() << ' ' << gr.alph_.size() << ' '
-            << gr.rules_.size() << '\n';
+  out << gr.non_terms.size() << ' ' << gr.alph.size() << ' ' << gr.rules.size()
+      << '\n';
 
-  Print(gr.non_terms_.begin(), gr.non_terms_.end(), out);
-  Print(gr.alph_.begin(), gr.alph_.end(), out);
+  Print(gr.non_terms.begin(), gr.non_terms.end(), out);
+  Print(gr.alph.begin(), gr.alph.end(), out);
 
-  for(const auto& rule : gr.rules_) {
+  for (const auto& rule : gr.rules) {
     out << rule.first << " -> " << rule.second << '\n';
   }
 
-  out << gr.start_ << '\n';
+  out << gr.start << '\n';
   out << "End Print Grammar\n" << std::endl;
   return out;
 }
