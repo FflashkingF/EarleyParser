@@ -54,7 +54,7 @@ std::istream& operator>>(std::istream& in, Grammar& gr) {
 }
 
 std::ostream& operator<<(std::ostream& out, const Grammar& gr) {
-  out << "Print Grammar:\n";
+  out << "\nStart Print Grammar\n";
 
   out << gr.non_terms_.size() << ' ' << gr.alph_.size() << ' '
             << gr.rules_.size() << '\n';
@@ -66,7 +66,7 @@ std::ostream& operator<<(std::ostream& out, const Grammar& gr) {
     out << rule.first << " -> " << rule.second << '\n';
   }
 
-  out << gr.start_ << std::endl;
-
+  out << gr.start_ << '\n';
+  out << "End Print Grammar\n" << std::endl;
   return out;
 }
