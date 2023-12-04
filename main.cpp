@@ -18,11 +18,12 @@ int main() {
   Earley ea(gr);
 
   size_t cnt_queries;
-  std::cin >> cnt_queries;
   std::string word_query;
-  
+  std::cin >> cnt_queries;
+  std::getline(std::cin, word_query);
+
   while(cnt_queries-- != 0) {
-    std::cin >> word_query;
+    word_query = ScanString(true);
     std::cout << (ea.predict(word_query) ? "YES" : "NO" ) << std::endl << std::endl << std::endl;;
   }
 }
