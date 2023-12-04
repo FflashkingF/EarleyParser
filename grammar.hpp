@@ -7,8 +7,14 @@
 
 #include "in_out_helper.hpp"
 
+using Rule = std::pair<char, std::string>;
+std::ostream& operator<<(std::ostream& out, const Rule& rule) {
+  std::cout << rule.first << " -> " << rule.second;
+  return out;
+}
+
 struct Grammar {
-  using Rule = std::pair<char, std::string>;
+  
   std::set<char> non_terms;
   std::set<char> alph;
   std::set<Rule> rules;
@@ -43,7 +49,7 @@ std::istream& operator>>(std::istream& in, Grammar& gr) {
   temp = ScanString(false);
   std::set<char> alph(temp.begin(), temp.end());
 
-  std::set<Grammar::Rule> rules;
+  std::set<Rule> rules;
   for (size_t i = 0; i < cnt_of_rules; ++i) {
     temp = ScanString(false);
     rules.insert(GetRule(temp));
@@ -67,7 +73,7 @@ std::ostream& operator<<(std::ostream& out, const Grammar& gr) {
   Print(gr.alph.begin(), gr.alph.end(), out);
 
   for (const auto& rule : gr.rules) {
-    out << rule.first << " -> " << rule.second << '\n';
+    out << rule << std::endl;
   }
 
   out << gr.start << '\n';
