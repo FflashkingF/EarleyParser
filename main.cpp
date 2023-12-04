@@ -20,6 +20,6 @@ int main() {
   std::string word;
   while(q-- != 0) {
     std::cin >> word;
-    std::cout << (ea.predict(word) ? "YES" : "NO" ) << std::endl << std::endl << std::endl;
+    std::cout << (ea.predict(word) ? "YES" : "NO" ) << std::endl << std::endl << std::endl;;
   }
 }
