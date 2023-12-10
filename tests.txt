@@ -1,0 +1,77 @@
+test1:
+"
+1 1 1
+S
+s 
+S -> s
+S
+
+1
+s
+"
+
+test2:
+"
+1 2 2
+S
+ab
+S-> aSbS
+S -> 
+S
+
+3
+aababb
+aabbba
+
+"
+
+
+test3: 
+"
+1 2 2
+S
+()
+S->
+S->(S)S
+S
+
+11
+
+()()()
+(((((((())))))))
+()()((()()()))
+())
+(()
+((()))()()(())(()()
+)()()
+(()()
+()()()()()()))))))
+)))))))))))))(((((((((
+"
+
+test4:
+"
+2 2 7
+AB
+ab
+A->AB
+A->a
+A->aA
+A->
+B->bB
+B->b
+B->
+A
+
+10
+ab
+aaaaabbbbb
+aaabbbbbbbbbb
+bbbbbbbbbbbbb
+aaaaaaaaaaaaa
+bbbbbba
+ababa
+aba
+bbbbbbaaaaaaaa
+abbbbbbbbbbbbbbbba
+"
