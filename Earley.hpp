@@ -1,7 +1,7 @@
 #pragma once
 
 #include <iterator>
-
+#include <utility>
 #include "grammar.hpp"
 
 class Earley {
@@ -159,7 +159,7 @@ class Earley {
       while (!layers[cur_r].empty()) {
         auto&& new_el_comp = Complete(layers[cur_r], exists, cur_r);
         auto&& new_el_predict = Predict(layers[cur_r], exists[cur_r], cur_r);
-        layers[cur_r] = new_el_comp;
+        layers[cur_r] = std::move(new_el_comp);
         layers[cur_r].insert(new_el_predict.begin(), new_el_predict.end());
       }
     }
