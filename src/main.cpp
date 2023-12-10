@@ -3,7 +3,8 @@
 #include <string>
 
 #include "Earley.hpp"
-// #include "grammar.hpp"
+#include "grammar.hpp"
+#include "in_out_helper.hpp"
 
 struct Aboba {
   int a;
@@ -13,7 +14,7 @@ struct Aboba {
 int main() {
   Grammar gr;
   std::cin >> gr;
-  //std::cout << gr;
+  // std::cout << gr;
 
   Earley ea(gr);
 
@@ -22,8 +23,11 @@ int main() {
   std::cin >> cnt_queries;
   std::getline(std::cin, word_query);
 
-  while(cnt_queries-- != 0) {
+  while (cnt_queries-- != 0) {
     word_query = ScanString(true);
-    std::cout << (ea.predict(word_query) ? "YES" : "NO" ) << std::endl << std::endl << std::endl;;
+    std::cout << (ea.predict(word_query) ? "YES" : "NO") << std::endl
+              << std::endl
+              << std::endl;
+    ;
   }
 }

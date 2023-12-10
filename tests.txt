@@ -19,10 +19,9 @@ S-> aSbS
 S -> 
 S
 
-3
+2
 aababb
 aabbba
-
 "
 
 

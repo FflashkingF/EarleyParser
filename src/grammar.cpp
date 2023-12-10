@@ -1,35 +1,17 @@
-#pragma once
+#include "grammar.hpp"
 
-#include <iostream>
-#include <map>
-#include <set>
-#include <vector>
-
-#include "in_out_helper.hpp"
-
-using Rule = std::pair<char, std::string>;
 std::ostream& operator<<(std::ostream& out, const Rule& rule) {
   std::cout << rule.first << " -> " << rule.second;
   return out;
 }
 
-struct Grammar {
-  
-  std::set<char> non_terms;
-  std::set<char> alph;
-  std::set<Rule> rules;
-  char start;
-  std::map<char, std::vector<std::string>> fast_rules;
-
-  Grammar() = default;
-  Grammar(const std::set<char>& non_terms, const std::set<char>& alph,
-          const std::set<Rule>& rules, char start)
-      : non_terms(non_terms), alph(alph), rules(rules), start(start) {
-    for (const auto& rule : rules) {
-      fast_rules[rule.first].push_back(rule.second);
-    }
+Grammar::Grammar(const std::set<char>& non_terms, const std::set<char>& alph,
+                 const std::set<Rule>& rules, char start)
+    : non_terms(non_terms), alph(alph), rules(rules), start(start) {
+  for (const auto& rule : rules) {
+    fast_rules[rule.first].push_back(rule.second);
   }
-};
+}
 
 std::pair<char, std::string> GetRule(std::string& str) {
   return {str[0], str.substr(3)};

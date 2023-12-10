@@ -8,4 +8,4 @@ set(CMAKE_RUNTIME_OUTPUT_DIRECTORY ${PROJECT_SOURCE_DIR}/bin)
 set(GCC_COVERAGE_COMPILE_FLAGS "-O0 -fsanitize=undefined,address -std=c++20 -g -Wall -Wextra -Wpedantic")
 set(CMAKE_CXX_FLAGS ${GCC_COVERAGE_COMPILE_FLAGS})
 
-add_executable(EarleyParser main.cpp)
+add_executable(EarleyParser src/main.cpp src/grammar.cpp src/in_out_helper.cpp src/Earley.cpp)
