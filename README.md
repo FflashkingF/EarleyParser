@@ -4,4 +4,4 @@ do:
 2. cd build
 3. cmake ..
 4. make
-5. now you have dir bin and binary file into it
+5. now you have directory "bin" and binary "EarleyParser" file into it
