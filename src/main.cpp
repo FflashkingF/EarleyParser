@@ -12,7 +12,7 @@ struct Aboba {
 };
 
 int main() {
-  Grammar gr;
+  GrammarFree gr;
   std::cin >> gr;
   // std::cout << gr;
 

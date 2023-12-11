@@ -30,12 +30,12 @@ std::set<Earley::State> Earley::Scan(const std::set<State>& exist,
   return new_layer_by_r;
 }
 
-std::set<Earley::State> Earley::Predict(const std::set<State>& layer_by_r,
+std::set<Earley::State> Earley::Predict(const std::set<State>& raw_layer,
                                         std::set<State>& exist,
                                         size_t cur_r) const {
   std::set<State> new_states;
 
-  for (const State& st : layer_by_r) {
+  for (const State& st : raw_layer) {
     char cur_symb = st.rule.second[st.dot_pos];
 
     if (!gr.non_terms.contains(cur_symb)) {
@@ -59,12 +59,12 @@ std::set<Earley::State> Earley::Predict(const std::set<State>& layer_by_r,
   return new_states;
 }
 
-std::set<Earley::State> Earley::Complete(const std::set<State>& layer_r,
+std::set<Earley::State> Earley::Complete(const std::set<State>& raw_layer,
                                          std::vector<std::set<State>>& exists,
                                          size_t cur_r) const {
   std::set<State> new_states;
 
-  for (const State& st : layer_r) {
+  for (const State& st : raw_layer) {
     if (st.dot_pos < st.rule.second.size()) {
       continue;
     }
@@ -86,7 +86,7 @@ std::set<Earley::State> Earley::Complete(const std::set<State>& layer_r,
   return new_states;
 }
 
-Earley::Earley(const Grammar& another_gr)
+Earley::Earley(const GrammarFree& another_gr)
     : gr(another_gr), start_rule(Rule{new_start, std::string(1, gr.start)}) {
   gr.non_terms.insert(new_start);
   gr.rules.insert(start_rule);
@@ -94,27 +94,27 @@ Earley::Earley(const Grammar& another_gr)
   gr.start = new_start;
 }
 
-void Earley::fit(const Grammar& gr) {
+void Earley::fit(const GrammarFree& gr) {
   Earley copy(gr);
   std::swap(*this, copy);
 }
 
 bool Earley::predict(const std::string& word) const {
-  std::vector<std::set<State>> layers(word.size() + 1);
+  std::vector<std::set<State>> raw_layers(word.size() + 1);
   std::vector<std::set<State>> exists(word.size() + 1);
-  layers[0].insert({start_rule, 0, 0});
+  raw_layers[0].insert({start_rule, 0, 0});
   exists[0].insert({start_rule, 0, 0});
 
   for (size_t cur_r = 0; cur_r <= word.size(); ++cur_r) {
     if (cur_r != 0) {
-      layers[cur_r] = Scan(exists[cur_r - 1], word[cur_r - 1], exists[cur_r]);
+      raw_layers[cur_r] = Scan(exists[cur_r - 1], word[cur_r - 1], exists[cur_r]);
     }
 
-    while (!layers[cur_r].empty()) {
-      auto&& new_el_comp = Complete(layers[cur_r], exists, cur_r);
-      auto&& new_el_predict = Predict(layers[cur_r], exists[cur_r], cur_r);
-      layers[cur_r] = std::move(new_el_comp);
-      layers[cur_r].insert(new_el_predict.begin(), new_el_predict.end());
+    while (!raw_layers[cur_r].empty()) {
+      auto&& new_el_comp = Complete(raw_layers[cur_r], exists, cur_r);
+      auto&& new_el_predict = Predict(raw_layers[cur_r], exists[cur_r], cur_r);
+      raw_layers[cur_r] = std::move(new_el_comp);
+      raw_layers[cur_r].insert(new_el_predict.begin(), new_el_predict.end());
     }
   }
   return exists.back().contains(State{start_rule, 1, 0});

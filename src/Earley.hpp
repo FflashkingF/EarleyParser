@@ -6,7 +6,7 @@
 
 class Earley {
  private:
-  Grammar gr;
+  GrammarFree gr;
   Rule start_rule;
   static constexpr char new_start = '@';
 
@@ -31,9 +31,9 @@ class Earley {
  public:
   Earley() = default;
 
-  Earley(const Grammar& another_gr);
+  Earley(const GrammarFree& another_gr);
 
-  void fit(const Grammar& gr);
+  void fit(const GrammarFree& gr);
 
   bool predict(const std::string& word) const;
 };
