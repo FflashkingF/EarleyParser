@@ -22,7 +22,7 @@ std::pair<char, std::string> GetRule(std::string& str) {
   return {str[0], str.substr(3)};
 }
 
-template<typename T>
+template <typename T>
 void CheckSize(const T& str, size_t req_size, std::string message) {
   if (str.size() != req_size) {
     throw std::runtime_error("bad input - bad size - " + std::move(message));
@@ -31,7 +31,7 @@ void CheckSize(const T& str, size_t req_size, std::string message) {
 
 bool IsNonTerm(char ch) { return std::isupper(ch); }
 
-template<typename T>
+template <typename T>
 void CheckNonTerms(const T& str, size_t req_size) {
   CheckSize(str, req_size, "non terms");
 
@@ -48,14 +48,44 @@ bool IsAlph(char ch) {
   return std::islower(ch) || std::isdigit(ch) || extra.find(ch) != extra.end();
 }
 
-template<typename T>
+template <typename T>
 void CheckAlph(const T& str, size_t req_size) {
   CheckSize(str, req_size, "alph");
 
   for (char ch : str) {
     if (!IsAlph(ch)) {
-      std::runtime_error("bad input - alph");
+      throw std::runtime_error("bad input - alph");
     }
+  }
+}
+
+void CheckRule(const std::string& str) {
+  static const std::string exc = "bad input - rule - ";
+
+  if (str.size() < 3) {
+    throw std::runtime_error(exc + "small size");
+  }
+
+  if (!IsNonTerm(str[0])) {
+    throw std::runtime_error(exc + "left - not a non term");
+  }
+
+  if (str.substr(1, 2) != "->") {
+    throw std::runtime_error(exc + "not a ->");
+  }
+
+  for (size_t i = 3; i < str.size(); ++i) {
+    if (!IsAlph(str[i]) && !IsNonTerm(str[i])) {
+      throw std::runtime_error(exc + "right - bad symb");
+    }
+  }
+}
+
+void CheckStart(const std::string& str) {
+  CheckSize(str, 1, "Start");
+
+  if (!IsNonTerm(str[0])) {
+    throw std::runtime_error("bad Start symb");
   }
 }
 
@@ -70,7 +100,7 @@ std::istream& operator>>(std::istream& in, GrammarFree& gr) {
   temp = ScanString(false);
   std::set<char> non_terms(temp.begin(), temp.end());
   CheckNonTerms(non_terms, cnt_of_non_terms);
-  
+
   temp = ScanString(false);
   std::set<char> alph(temp.begin(), temp.end());
   CheckAlph(alph, size_of_alph);
@@ -78,10 +108,12 @@ std::istream& operator>>(std::istream& in, GrammarFree& gr) {
   std::set<Rule> rules;
   for (size_t i = 0; i < cnt_of_rules; ++i) {
     temp = ScanString(false);
+    CheckRule(temp);
     rules.insert(GetRule(temp));
   }
 
   temp = ScanString(false);
+  CheckStart(temp);
   char start = temp[0];
 
   gr = GrammarFree(non_terms, alph, rules, start);

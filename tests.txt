@@ -6,8 +6,9 @@ s
 S -> s
 S
 
-1
+2
 s
+a
 "
 
 test2:

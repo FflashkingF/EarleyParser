@@ -25,9 +25,7 @@ int main() {
 
   while (cnt_queries-- != 0) {
     word_query = ScanString(true);
-    std::cout << (ea.predict(word_query) ? "YES" : "NO") << std::endl
-              << std::endl
-              << std::endl;
+    std::cout << (ea.predict(word_query) ? "YES" : "NO") << std::endl;
     ;
   }
 }
